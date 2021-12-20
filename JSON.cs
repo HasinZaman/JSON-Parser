@@ -15,7 +15,7 @@ public class JSON
     /// <summary>
     ///     obj stores JSON data
     /// </summary>
-    public object obj;
+    private object obj;
 
     /// <summary>
     ///     Constructor creates JSON object during parsing
@@ -28,6 +28,87 @@ public class JSON
         this.obj = obj;
     }
 
+    /// <summary>
+    ///     getVal method returns JSON from dictionary
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>JSON of Object associate with key</returns>
+    public JSON getVal(string key)
+    {
+        if (type != typeof(Dictionary<string, JSON>).ToString())
+        {
+            throw new Exception();
+        }
+        if(((Dictionary<string, JSON>)obj).ContainsKey(key))
+        {
+            return ((Dictionary<string, JSON>)obj)[key];
+        }
+        throw new KeyNotFoundException($"{key} not in {this.ToString()}");
+    }
+
+    /// <summary>
+    ///     getKeys return an array of keys in JSON dictionary
+    /// </summary>
+    /// <returns>String array of keys</returns>
+    public string[] getKeys()
+    {
+        if (type != typeof(Dictionary<string, JSON>).ToString())
+        {
+            throw new Exception();
+        }
+        return (new List<string>(((Dictionary<string, JSON>)obj).Keys)).ToArray();
+    }
+
+    /// <summary>
+    ///     getVal method returns JSON from Array
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns>JSON of Object associate with index in Array</returns>
+    public JSON getVal(int index)
+    {
+        if (type != typeof(Array).ToString())
+        {
+            throw new Exception();
+        }
+
+        return ((JSON[])obj)[index];
+    }
+
+    /// <summary>
+    ///     getCount returns the size of array
+    /// </summary>
+    /// <returns>int of array size</returns>
+    public int getCount()
+    {
+        if (type != typeof(Array).ToString())
+        {
+            throw new Exception();
+        }
+        return ((JSON[])obj).Length;
+    }
+
+    /// <summary>
+    ///     getVal method returns string value
+    /// </summary>
+    /// <returns>string value of JSON object</returns>
+    public string getVal()
+    {
+        if (type != typeof(string).ToString())
+        {
+            throw new Exception();
+        }
+        return (string) obj;
+    }
+
+    public bool contains(string key)
+    {
+        if (type != typeof(Dictionary<string, JSON>).ToString())
+        {
+            throw new Exception();
+        }
+
+        return ((Dictionary<string, JSON>)obj).ContainsKey(key);
+    }
 
     /// <summary>
     ///     ToString recursively converts JSON object into string repersentation
@@ -35,7 +116,6 @@ public class JSON
     /// <returns>String of JSON object</returns>
     public override string ToString()
     {
-
         string tmp = "";
         if (this.type == typeof(string).ToString())
         {
@@ -318,4 +398,5 @@ public class JSON
 
         throw new ParseException();
     }
+
 }
